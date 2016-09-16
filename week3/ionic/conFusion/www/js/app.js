@@ -53,6 +53,7 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
     controller: 'AppCtrl'
   })
 
+  /*
   .state('app.home', {
     url: '/home',
     views: {
@@ -62,13 +63,43 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
       }
     }
   })
+  */
 
+  .state('app.home', {
+      url: '/home',
+      views: {
+        'mainContent': {
+          templateUrl: 'templates/home.html',
+          controller:'IndexController',
+          resolve: {
+              leader:  ['corporateFactory', function(corporateFactory){
+                    console.log("Getting leader");
+                  return corporateFactory.get({id: 3});
+              }],
+                dish: ['menuFactory', function(menuFactory) {
+                  return menuFactory.get({id:1});
+              }],
+                promotion: ['promotionFactory', function(promotionFactory) {
+                  return promotionFactory.get({id:0});
+              }]
+          }
+        }
+      }
+    })
+  
+  
   .state('app.aboutus', {
       url: '/aboutus',
       views: {
         'mainContent': {
           templateUrl: 'templates/aboutus.html',
-            controller: 'AboutController'
+            controller: 'AboutController',
+            resolve: {
+              leaders:  ['corporateFactory', function(corporateFactory){
+                  console.log("Getting leaders");
+                  return corporateFactory.query();
+              }]
+          }
         }
       }
     })
@@ -87,7 +118,13 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers','conFusion.service
       views: {
         'mainContent': {
           templateUrl: 'templates/menu.html',
-          controller: 'MenuController'
+          controller: 'MenuController',
+            resolve: {
+              dishes:  ['menuFactory', function(menuFactory){
+                  console.log("Getting menu items");
+                  return menuFactory.query();
+              }]
+            }
         }
       }
     })
